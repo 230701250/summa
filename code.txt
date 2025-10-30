@@ -1,35 +1,316 @@
-{
-  "name": "artboard-backend",
-  "version": "1.0.0",
-  "description": "ArtBoard Canvas Application Backend",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "jest --detectOpenHandles"
-  },
-  "keywords": [
-    "artboard",
-    "canvas",
-    "drawing",
-    "express",
-    "mongodb"
-  ],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^6.9.1",
-    "cors": "^2.8.5"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.20",
-    "jest": "^29.3.1"
-  }
+📁 src/Components/Login.jsx
+import React, { useState } from 'react';
+import './Login.css';
+
+function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    let tempErrors = {};
+
+    if (!email) tempErrors.email = 'Email is required';
+    if (!password) tempErrors.password = 'Password is required';
+
+    setErrors(tempErrors);
+  };
+
+  return (
+    <div className="login-container">
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <label>Email:</label>
+        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+
+        {errors.email && <p className="error">{errors.email}</p>}
+
+        <label>Password:</label>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+
+        {errors.password && <p className="error">{errors.password}</p>}
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
 }
 
+export default Login;
 
-import iconv from 'iconv-lite';
-import encodings from 'iconv-lite/encodings';
-iconv.encodings = encodings;
-require('../../node_modules/mysql2/node_modules/iconv-lite/lib').encodingExists('foo');
+📁 src/Components/Login.css
+.login-container {
+  text-align: center;
+  margin: 30px auto;
+  width: 300px;
+}
+.error {
+  color: red;
+  font-size: 0.9rem;
+}
+
+📁 src/Components/Register.jsx
+import React, { useState } from 'react';
+import './Register.css';
+
+function Register() {
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    mobile: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let tempErrors = {};
+
+    if (!form.firstName) tempErrors.firstName = 'First Name is required';
+    if (!form.lastName) tempErrors.lastName = 'Last Name is required';
+    if (!form.mobile) tempErrors.mobile = 'Mobile Number is required';
+    if (!form.email) tempErrors.email = 'Please enter a valid email address';
+    if (!form.password || form.password.length < 6)
+      tempErrors.password = 'Password must be at least 6 characters';
+    if (!form.confirmPassword)
+      tempErrors.confirmPassword = 'Confirm Password is required';
+
+    setErrors(tempErrors);
+  };
+
+  return (
+    <div className="register-container">
+      <h2>Register for SavorStudio</h2>
+      <form onSubmit={handleSubmit}>
+        <input name="firstName" placeholder="First Name" onChange={handleChange} />
+        {errors.firstName && <p className="error">{errors.firstName}</p>}
+
+        <input name="lastName" placeholder="Last Name" onChange={handleChange} />
+        {errors.lastName && <p className="error">{errors.lastName}</p>}
+
+        <input name="mobile" placeholder="Mobile Number" onChange={handleChange} />
+        {errors.mobile && <p className="error">{errors.mobile}</p>}
+
+        <input name="email" placeholder="Email" onChange={handleChange} />
+        {errors.email && <p className="error">{errors.email}</p>}
+
+        <input name="password" type="password" placeholder="Password" onChange={handleChange} />
+        {errors.password && <p className="error">{errors.password}</p>}
+
+        <input name="confirmPassword" type="password" placeholder="Confirm Password" onChange={handleChange} />
+        {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
+}
+
+export default Register;
+
+📁 src/Components/Register.css
+.register-container {
+  text-align: center;
+  margin: 30px auto;
+  width: 350px;
+}
+.error {
+  color: red;
+  font-size: 0.9rem;
+}
+
+📁 src/Components/ErrorPage.jsx
+import React from 'react';
+import './ErrorPage.css';
+
+function ErrorPage() {
+  return (
+    <div className="error-page">
+      <h2>Something Went Wrong</h2>
+      <p>We're sorry, but an error occurred. Please try again later.</p>
+    </div>
+  );
+}
+
+export default ErrorPage;
+
+📁 src/Components/ErrorPage.css
+.error-page {
+  text-align: center;
+  margin-top: 50px;
+  color: red;
+}
+
+📁 src/Viewers/DisplayTVShows.jsx
+import React from 'react';
+
+function DisplayTVShows() {
+  return (
+    <div>
+      <h2>TV Show Catalog</h2>
+      <button>Logout</button>
+
+      <select defaultValue="Sort by Title (A-Z)">
+        <option>Sort by Title (A-Z)</option>
+        <option>Sort by Title (Z-A)</option>
+      </select>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Status</th>
+            <th>Progress</th>
+            <th>Rating</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colSpan="6">No TV shows found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default DisplayTVShows;
+
+📁 src/Admin/ManageTVShow.jsx
+import React from 'react';
+import './ManageTVShow.css';
+
+function ManageTVShow() {
+  return (
+    <div>
+      <h2>Manage TV Shows</h2>
+      <button>Add TV Show</button>
+      <button>Logout</button>
+
+      <select defaultValue="All Statuses">
+        <option>All Statuses</option>
+        <option>Watching</option>
+        <option>Completed</option>
+        <option>Planned</option>
+      </select>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Status</th>
+            <th>Progress</th>
+            <th>Rating</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colSpan="6">No TV shows found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default ManageTVShow;
+
+📁 src/Admin/ManageTVShow.css
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+📁 src/Admin/CreateTVShow.jsx
+import React, { useState } from 'react';
+import './CreateTVShow.css';
+
+function CreateTVShow() {
+  const [form, setForm] = useState({
+    title: '',
+    genre: '',
+    status: '',
+    totalEpisodes: '',
+    watchedEpisodes: '',
+    rating: ''
+  });
+  const [errors, setErrors] = useState({});
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let tempErrors = {};
+
+    if (!form.title) tempErrors.title = 'Title is required';
+    if (!form.genre) tempErrors.genre = 'Genre is required';
+    if (!form.totalEpisodes || form.totalEpisodes < 1)
+      tempErrors.totalEpisodes = 'Total episodes must be at least 1';
+
+    setErrors(tempErrors);
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  return (
+    <div>
+      <h2>Add TV Show</h2>
+      <form onSubmit={handleSubmit}>
+        <label>Title:</label>
+        <input name="title" onChange={handleChange} />
+        {errors.title && <p className="error">{errors.title}</p>}
+
+        <label>Genre:</label>
+        <input name="genre" onChange={handleChange} />
+        {errors.genre && <p className="error">{errors.genre}</p>}
+
+        <label>Status:</label>
+        <input name="status" onChange={handleChange} />
+
+        <label>Total Episodes:</label>
+        <input type="number" name="totalEpisodes" onChange={handleChange} />
+        {errors.totalEpisodes && <p className="error">{errors.totalEpisodes}</p>}
+
+        <label>Watched Episodes:</label>
+        <input type="number" name="watchedEpisodes" onChange={handleChange} />
+
+        <label>Rating (1-10, optional):</label>
+        <input type="number" name="rating" onChange={handleChange} />
+
+        <button type="submit">Add TV Show</button>
+      </form>
+    </div>
+  );
+}
+
+export default CreateTVShow;
+
+📁 src/Admin/CreateTVShow.css
+.error {
+  color: red;
+  font-size: 0.9rem;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+  margin: 20px auto;
+}
+

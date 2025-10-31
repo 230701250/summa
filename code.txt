@@ -392,37 +392,29 @@ exports.validateToken = (req, res, next) => {
 
 🟣 models/userModel.js
 const mongoose = require('mongoose');
-const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: [true, 'First name is required'] },
-  lastName: { type: String, required: [true, 'Last name is required'] },
-  mobileNumber: {
+  name: {
     type: String,
-    required: [true, 'Mobile number is required'],
-    validate: {
-      validator: v => /^\d{10}$/.test(v),
-      message: props => `${props.value} is not a valid mobile number`
-    }
+    required: true,
+    trim: true
   },
   email: {
     type: String,
-    required: [true, 'Email is required'],
-    validate: {
-      validator: v => validator.isEmail(v),
-      message: props => `${props.value} is not a valid email address`
-    }
+    required: true,
+    trim: true,
+    // Basic email pattern check instead of validator
+    match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email']
   },
-  role: { type: String, enum: ['user', 'admin'], default: 'user' },
   password: {
     type: String,
-    required: [true, 'Password is required'],
-    minlength: [6, 'Password too short'],
-    maxlength: [255, 'Password too long']
+    required: true,
+    minlength: 6
   }
 });
 
 module.exports = mongoose.model('User', userSchema);
+
 
 🟣 models/tvShowModel.js
 const mongoose = require('mongoose');
@@ -568,5 +560,6 @@ router.delete('/:id', validateToken, tvShowController.deleteTVShow);
 router.post('/user', validateToken, tvShowController.getTVShowsByUserId);
 
 module.exports = router;
+
 
 

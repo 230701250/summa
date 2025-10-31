@@ -391,50 +391,39 @@ exports.validateToken = (req, res, next) => {
 };
 
 🟣 models/userModel.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   lastName: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
     required: true,
-    validate: {
-      validator: function (value) {
-        // ✅ basic email check: must contain '@' and '.'
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      },
-      message: 'Invalid email format'
-    }
+    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
   mobileNumber: {
     type: String,
     required: true,
-    validate: {
-      validator: function (value) {
-        // ✅ must be exactly 10 digits
-        return /^[0-9]{10}$/.test(value);
-      },
-      message: 'Invalid mobile number format'
-    }
+    match: /^[0-9]{10}$/,
   },
   password: {
     type: String,
     required: true,
     minlength: 8,
-    maxlength: 15
-  }
+    maxlength: 15,
+  },
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
+
 
 
 
@@ -584,6 +573,7 @@ router.delete('/:id', validateToken, tvShowController.deleteTVShow);
 router.post('/user', validateToken, tvShowController.getTVShowsByUserId);
 
 module.exports = router;
+
 
 
 

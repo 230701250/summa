@@ -394,48 +394,30 @@ exports.validateToken = (req, res, next) => {
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  firstName: {
+  name: {
     type: String,
-    required: [true, 'First Name is required'],
-    trim: true
-  },
-  lastName: {
-    type: String,
-    required: [true, 'Last Name is required'],
-    trim: true
+    required: true
   },
   email: {
     type: String,
-    required: [true, 'Email is required'],
-    lowercase: true,
-    validate: {
-      validator: function (value) {
-        // Simple email validation (no external packages)
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      },
-      message: 'Invalid email format'
-    }
+    required: true,
+    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/   // basic email format check
   },
   mobileNumber: {
     type: String,
-    required: [true, 'Mobile Number is required'],
-    validate: {
-      validator: function (value) {
-        // Accept 10-digit mobile numbers only
-        return /^[0-9]{10}$/.test(value);
-      },
-      message: 'Invalid mobile number format'
-    }
+    required: true,
+    match: /^[0-9]{10}$/  // exactly 10 digits
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
-    minlength: [6, 'Password must be at least 6 characters'],
-    maxlength: [15, 'Password cannot exceed 15 characters']
+    required: true,
+    minlength: 8,         // minimum 8 characters
+    maxlength: 15         // maximum 15 characters
   }
 });
 
 module.exports = mongoose.model('User', userSchema);
+
 
 
 
@@ -583,6 +565,7 @@ router.delete('/:id', validateToken, tvShowController.deleteTVShow);
 router.post('/user', validateToken, tvShowController.getTVShowsByUserId);
 
 module.exports = router;
+
 
 
 
